@@ -21,13 +21,13 @@ if __name__ == "__main__":
     min_area            = sum([x*y for (x,y) in rects])
     print "minimum area: %d" % (min_area)
     print rects
-    height = max([ x for x,y in rects ]) 
-    width  = min_area / height
-    height = height + 0.1
-    width = width + 0.1
-    print "width: %d, height: %d" % (width,height)
+    min_height = max([ x for x,y in rects ]) 
+    min_width  = min_area / min_height
+    min_height = min_height + 0.1
+    min_width = min_width + 0.1
+    print "width: %d, height: %d" % (min_width,min_height)
 
-    packer = CygonRectanglePacker(width,height)
+    packer = CygonRectanglePacker(min_width,min_height)
     for x,y in rects:
         print "rectangle %d %d" % (x, y)
         point = packer.TryPack(x,y)
