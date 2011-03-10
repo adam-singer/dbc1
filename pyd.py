@@ -5,11 +5,6 @@
 import random
 import sys
 from cygon import CygonRectanglePacker
-from itertools import chain
-
-def flatten(listOfLists):
-    "Flatten one level of nesting"
-    return chain.from_iterable(listOfLists)
 
 
 if __name__ == "__main__":
@@ -24,20 +19,26 @@ if __name__ == "__main__":
         rects.append((x,y))
 
     min_area            = sum([x*y for (x,y) in rects])
-    largest_dimension   = max([ x for x,y in rects ])
-    other_dimension     = min_area / largest_dimension
+    print "minimum area: %d" % (min_area)
+    print rects
+    height = max([ x for x,y in rects ]) 
+    width  = min_area / height
+    height = height + 0.1
+    width = width + 0.1
+    print "width: %d, height: %d" % (width,height)
 
-    packer = CygonRectanglePacker(largest_dimension,other_dimension)
-    fits = True
+    packer = CygonRectanglePacker(width,height)
     for x,y in rects:
-        point = packer.tryFindBestPlacement(x,y)
+        print "rectangle %d %d" % (x, y)
+        point = packer.TryPack(x,y)
         if point is None:
-            fits = False
-            break
+            point = packer.TryPack(y,x)
+            if point is None:
+                print "Did not fit ...",
+                print "%d %d" % (x, y)
+            else:
+                print "Fit ... ",
+                print "%d %d" % (point.x, point.y)
         else:
+            print "Fit ... ",
             print "%d %d" % (point.x, point.y)
-
-    if fits:
-        print "%d" % (min_area)
-    else:
-        print "rectangles do not fit in minimum area"
