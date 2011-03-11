@@ -20,10 +20,11 @@ def is_bounding(width,height,rects):
 
 
 def find_bounding(min_width,min_height,max_width,max_height,rects):
-    for w in xrange(min_width,max_width):
-        for h in xrange(min_height,max_height):
+    for w in xrange(min_width,max_width+1):
+        for h in xrange(min_height,max_height+1):
             if is_bounding(w,h,rects):
                 return (w,h)
+        print
     return (max_width,max_height)
     
 
@@ -33,8 +34,9 @@ def max_rectangle(rects):
     packer = Packer(length+EPSILON,height+EPSILON)
     width  = 0
     for (x,y) in rects:
+        print "%d %d" % (x,y)
         point = packer.TryPack(x,y)
-        if point.x > width:
+        if point.x >= width:
             width = point.x
     return (width,height)
 
