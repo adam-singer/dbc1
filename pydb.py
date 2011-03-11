@@ -15,8 +15,7 @@ def is_bounding(width,height,rects):
     packer = Packer(width,height)
     for x,y in rects:
         if not packer.TryPack(x,y):
-            if not packer.TryPack(y,x):
-                return False
+            return False
     return True
 
 
@@ -39,6 +38,13 @@ def max_rectangle(rects):
         if point:
             if point.x >= width:
                 width = point.x
+        """
+        else:
+            point = packer.TryPack(y,x)
+            if point:
+                if point.x >= width:
+                    width = point.x
+        """
             
     return (width,height)
 
