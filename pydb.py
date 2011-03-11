@@ -7,35 +7,36 @@ import sys
 from cygon import CygonRectanglePacker
 
 EPSILON = 0.001
+Packer = CygonRectanglePacker
 
-def max_rectangle(rects):
-
-    height = max([ y for x,y in rects ]) 
-    
-def is_bounding(width,height,rects, Packer=CygonRectanglePacker):
+def is_bounding(width,height,rects):
     height = height + EPSILON
     width  = width + EPSILON
-    
     packer = Packer(width,height)
     for x,y in rects:
         if not packer.TryPack(x,y):
             return False
-
     return True
 
 
-def find_bounding():
-    pass
+def find_bounding(min_width,min_height,max_width,max_height,rects):
+    for w in xrange(min_width,max_width):
+        for h in xrange(min_height,max_height):
+            if is_bounding(w,h,rects):
+                return (w,h)
+    return (max_width,max_height)
+    
 
-def max_rectangle(rects,Packer=CygonRectanglePacker):
+def max_rectangle(rects):
     height = max([ y for x,y in rects ]) 
-    width = sum([x for x,y in rects])
-    packer = Packer(width+EPSILON,height+EPSILON)
-    point = None
+    length = sum([x for x,y in rects])
+    packer = Packer(length+EPSILON,height+EPSILON)
+    width  = 0
     for (x,y) in rects:
         point = packer.TryPack(x,y)
-        print "%d, %d" % (point.x,point.y)
-    return (point.x,height)
+        if point.x > width:
+            width = point.x
+    return (width,height)
 
 def min_rectangle(rects):
     area   = sum([x*y for (x,y) in rects])
@@ -55,12 +56,6 @@ if __name__ == "__main__":
         rects.append((x,y))
 
     (min_width,min_height) = min_rectangle(rects)
-    print "minimum area: %d" % (min_width*min_height)
-    print rects
-
-    if is_bounding(min_width,min_height,rects):
-        print "bounding"
-    else:
-        print "not bounding"
-
-    print "%d %d" % (max_rectangle(rects))
+    (max_width,max_height) = max_rectangle(rects)
+    width,height = find_bounding(min_width,min_height,max_width,max_height,rects)
+    print "%d %d" % (width,height)
