@@ -6,7 +6,7 @@ import random
 import sys
 from cygon import CygonRectanglePacker
 
-EPSILON = 1
+EPSILON = 0.001
 Packer = CygonRectanglePacker
 
 def is_bounding(width,height,rects):
@@ -15,7 +15,8 @@ def is_bounding(width,height,rects):
     packer = Packer(width,height)
     for x,y in rects:
         if not packer.TryPack(x,y):
-            return False
+            if not packer.TryPack(y,x):
+                return False
     return True
 
 
@@ -23,6 +24,7 @@ def find_bounding(min_width,min_height,max_width,max_height,rects):
     for w in xrange(min_width,max_width+1):
         for h in xrange(min_height,max_height+1):
             if is_bounding(w,h,rects):
+                print "found solution"
                 return (w,h)
     return (max_width,max_height)
     
@@ -37,9 +39,6 @@ def max_rectangle(rects):
         if point:
             if point.x >= width:
                 width = point.x
-        else:
-            print "%d %d" % (x,y)
-            print "%d %d" % (length,height)
             
     return (width,height)
 
@@ -49,6 +48,10 @@ def min_rectangle(rects):
     width  = area / height
     return (width, height)
     
+
+def coord(w,h,comment=""):
+    print "%s %d %d" % (comment,w,h)
+
 if __name__ == "__main__":
 
     rects = []
@@ -61,8 +64,10 @@ if __name__ == "__main__":
         rects.append((x,y))
 
     (min_width,min_height) = min_rectangle(rects)
+    coord(min_width,min_height,"min rectangle:")
     (max_width,max_height) = max_rectangle(rects)
+    coord(max_width,max_height,"max rectangle:")
     width,height = find_bounding(min_width,min_height,max_width,max_height,rects)
-    print "solution: %d %d" % (width,height)
-    waste = min_width * min_height / (width * height)
+    coord(width,height,"solution:")
+    waste = 1 - ((min_width * min_height) / float(width * height))
     print "waste: %.4f" % (waste)
