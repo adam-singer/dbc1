@@ -25,7 +25,7 @@ def find_bounding(min_area,max_area,rects):
         x,y = min_dimension,(area/min_dimension)
         if y > x:
             x,y = y,x
-        for w in xrange(x,y+1):
+        for w in xrange(x,y):
             h = area / w
             if is_bounding(w,h,rects):
                 return (w,h)
