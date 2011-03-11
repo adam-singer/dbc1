@@ -64,3 +64,5 @@ if __name__ == "__main__":
     (max_width,max_height) = max_rectangle(rects)
     width,height = find_bounding(min_width,min_height,max_width,max_height,rects)
     print "solution: %d %d" % (width,height)
+    waste = min_width * min_height / (width * height)
+    print "waste: %.4f" % (waste)
