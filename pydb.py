@@ -4,10 +4,9 @@
 
 import random
 import sys
-from cygon import CygonRectanglePacker
+from cygon import CygonRectanglePacker as Packer
 
 EPSILON = 0.001
-Packer = CygonRectanglePacker
 
 def is_bounding(width,height,rects):
     height = height + EPSILON
