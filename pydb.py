@@ -34,9 +34,8 @@ def max_rectangle(rects):
     width  = 0
     for (x,y) in rects:
         point = packer.TryPack(x,y)
-        if point:
-            if point.x >= width:
-                width = point.x
+        if point.x >= width:
+            width = point.x
             
     return (width,height)
 
