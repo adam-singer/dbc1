@@ -1,15 +1,13 @@
 import random
+import sys
 
 def rectanglesN(N=100):
-    widths  = range(0,N)
-    heights = range(0,N)
-    
-    random.shuffle(widths)
-    random.shuffle(heights)
     print N
     for i in range(N):
-        print "%d %d" % (widths[i],heights[i])
+        w = random.randrange(1,N)
+        h = random.randrange(1,N)
+        print "%d %d" % (w,h)
 
 
 if __name__ == "__main__":
-    rectanglesN(20)
+    rectanglesN(int(sys.argv[1].strip()))
