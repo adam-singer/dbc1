@@ -19,9 +19,13 @@ def is_bounding(width,height,rects):
     return True
 
 
-def find_bounding(min_width,min_height,max_width,max_height,rects):
-    for w in xrange(min_width,max_width+1):
-        for h in xrange(min_height,max_height+1):
+def find_bounding(min_area,max_area,rects,min_dimension):
+    for area in range(min_area,max_area+1):
+        x,y = min_dimension,(area/min_dimension)
+        if y > x:
+            x,y = y,x
+        for w in xrange(x,y+1):
+            h = area / w
             if is_bounding(w,h,rects):
                 return (w,h)
     return (max_width,max_height)
@@ -64,7 +68,7 @@ if __name__ == "__main__":
     coord(min_width,min_height,"min rectangle:")
     (max_width,max_height) = max_rectangle(rects)
     coord(max_width,max_height,"max rectangle:")
-    width,height = find_bounding(min_width,min_height,max_width,max_height,rects)
+    width,height = find_bounding(min_width*min_height,max_width*max_height,rects,min_height)
     coord(width,height,"solution:")
     waste = 1 - ((min_width * min_height) / float(width * height))
     print "waste: %.4f" % (waste)
