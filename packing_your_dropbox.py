@@ -301,5 +301,5 @@ if __name__ == "__main__":
     min_area = sum([x*y for (x,y) in rects])
     bounding = find_bounding(rects)
     print bounding
-    waste = 1 - (min_area / float(bounding))
-    print "waste: %.4f" % (waste)
+    #waste = 1 - (min_area / float(bounding))
+    #print "waste: %.4f" % (waste)
