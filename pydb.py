@@ -18,16 +18,16 @@ def is_bounding(width,height,rects):
 
 
 def find_bounding(min_area,max_area,rects):
-    min_dimension = max([ y for x,y in rects ]) 
+    H = max([ y for x,y in rects ]) 
     for area in range(min_area,max_area+1):
-        print "area %d" % (area)
-        x,y = min_dimension,(area/min_dimension)
-        for w in xrange(x,y):
-            h = area / w
-            print "%.2f" % (h)
-            if is_bounding(w,h,rects):
-                return (w,h)
-    return (max_area/min_dimension,min_dimension)
+        x,y = H,(area/H)
+        if x > y: x,y = y,x
+        for i in xrange(x,y+1):
+            for j in xrange(x,y+1):
+                if i*j >= min_area and i*j <= max_area:
+                    if is_bounding(i,j,rects):
+                        return (i,j)
+    return (max_area/H,H)
     
 
 def max_rectangle(rects):
