@@ -17,20 +17,7 @@ def is_bounding(width,height,rects):
     return True
 
 
-def find_bounding(min_area,max_area,rects):
-    H = max([ y for x,y in rects ]) 
-    for area in range(min_area,max_area+1):
-        x,y = H,(area/H)
-        if x > y: x,y = y,x
-        for i in xrange(x,y+1):
-            for j in xrange(x,y+1):
-                if i*j >= min_area and i*j <= max_area:
-                    if is_bounding(i,j,rects):
-                        return (i,j)
-    return (max_area/H,H)
-    
-
-def max_rectangle(rects):
+def find_bounding(rects):
     H = max([ y for x,y in rects ]) 
     L = sum([x for x,y in rects])
     W = L
@@ -56,12 +43,8 @@ if __name__ == "__main__":
             x,y = y,x
         rects.append((x,y))
 
-    min_area   = sum([x*y for (x,y) in rects])
-    min_height = max([y for x,y in rects])
-    coord(float(min_area/min_height),float(min_height),"min rectangle:")
-    max_area = max_rectangle(rects)
-    coord(float(max_area/min_height),min_height,"max rectangle:")
-    width,height = find_bounding(min_area,max_area,rects)
-    coord(width,height,"solution:")
-    waste = 1 - (min_area / float(width * height))
+    min_area = sum([x*y for (x,y) in rects])
+    bounding = find_bounding(rects)
+    print bounding
+    waste = 1 - (min_area / float(bounding))
     print "waste: %.4f" % (waste)
