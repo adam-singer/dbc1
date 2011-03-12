@@ -260,49 +260,32 @@ class CygonRectanglePacker(RectanglePacker):
 
 """ End of Cygon Packer code """
 
-EPSILON = 0.001
 Packer = CygonRectanglePacker
+EPSILON = 0.001
 
 def is_bounding(width,height,rects):
-    height = height + EPSILON
-    width  = width + EPSILON
-    packer = Packer(width,height)
+    packer = Packer(width+EPSILON,height+EPSILON)
     for x,y in rects:
-        if not packer.TryPack(x,y):
+        if packer.TryPack(x,y) is None and packer.TryPack(y,x) is None:
             return False
+    # if you reach here, all rectangles fit
     return True
 
 
-def find_bounding(min_width,min_height,max_width,max_height,rects):
-    for w in xrange(min_width,max_width+1):
-        for h in xrange(min_height,max_height+1):
-            if is_bounding(w,h,rects):
-                return (w,h)
-    return (max_width,max_height)
-    
-
-def max_rectangle(rects):
-    height = max([ y for x,y in rects ]) 
-    length = sum([x for x,y in rects])
-    packer = Packer(length+EPSILON,height+EPSILON)
-    width  = 0
-    for (x,y) in rects:
-        point = packer.TryPack(x,y)
-        if point:
-            if point.x >= width:
-                width = point.x
+def find_bounding(rects):
+    H = max([ y for x,y in rects ]) 
+    L = sum([x for x,y in rects])
+    W = L
+    for w in xrange(L,1,-1):
+        if not is_bounding(w,H,rects):
+            return W * H
+        else:
+            W = w
             
-    return (width,height)
 
-def min_rectangle(rects):
-    area   = sum([x*y for (x,y) in rects])
-    height = max([ y for x,y in rects ]) 
-    width  = area / height
-    return (width, height)
-    
+def coord(w,h,comment="rectangle:"):
+    print "%s %.2f %2.f" % (comment,w,h)
 
-def coord(w,h,comment=""):
-    print "%s %d %d" % (comment,w,h)
 
 if __name__ == "__main__":
 
@@ -315,12 +298,8 @@ if __name__ == "__main__":
             x,y = y,x
         rects.append((x,y))
 
-    (min_width,min_height) = min_rectangle(rects)
-    #coord(min_width,min_height,"min rectangle:")
-    (max_width,max_height) = max_rectangle(rects)
-    #coord(max_width,max_height,"max rectangle:")
-    width,height = find_bounding(min_width,min_height,max_width,max_height,rects)
-    #coord(width,height,"solution:")
-    waste = 1 - ((min_width * min_height) / float(width * height))
-    #print "waste: %.4f" % (waste)
-    print width * height
+    min_area = sum([x*y for (x,y) in rects])
+    bounding = find_bounding(rects)
+    print bounding
+    waste = 1 - (min_area / float(bounding))
+    print "waste: %.4f" % (waste)
